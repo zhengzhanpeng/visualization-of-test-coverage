@@ -45,7 +45,30 @@ public class JavaFileTest {
         assertEquals("public class JavaFileTest {", results.get(7));
     }
 
-//    @Test
+    @Test
+    void should_only_add_TestCoverage_annotation_when_java_file_have_contains_package() {
+        final List<String> lineList = Arrays.asList(
+                "package com.github.zhengzhanpeng;",
+                "",
+                "import com.github.zhengzhanpeng.annotation.TestCoverage;",
+                "import java.io.IOException;",
+                "import java.util.List;",
+                "",
+                "public class JavaFileTest {"
+        );
+
+        List<String> results = javaFile.generateLineListWhichContainsTestCoverage(lineList, 78);
+        assertEquals("package com.github.zhengzhanpeng;", results.get(0));
+        assertEquals("", results.get(1));
+        assertEquals("import com.github.zhengzhanpeng.annotation.TestCoverage;", results.get(2));
+        assertEquals("import java.io.IOException;", results.get(3));
+        assertEquals("import java.util.List;", results.get(4));
+        assertEquals("", results.get(5));
+        assertEquals("@TestCoverage(78)", results.get(6));
+        assertEquals("public class JavaFileTest {", results.get(7));
+    }
+
+    //    @Test
 //    void name() throws IOException {
 //        javaFile.updateTestCoverage("com/github/zhengzhanpeng/JavaFile.java", 72);
 //    }

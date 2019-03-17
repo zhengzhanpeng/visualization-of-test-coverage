@@ -31,7 +31,7 @@ public class JavaFile {
         List<String> copyTargetList = lineList.stream()
                                               .collect(Collectors.toList());
         final boolean isImportPackage = copyTargetList.stream()
-                                                      .anyMatch(line -> line.equals(TestCoverage.class.getName()));
+                                                      .anyMatch(line -> line.contains(TestCoverage.class.getName()));
         if (!isImportPackage) {
             copyTargetList.add(2, String.format("import %s;", TestCoverage.class.getName()));
         }
