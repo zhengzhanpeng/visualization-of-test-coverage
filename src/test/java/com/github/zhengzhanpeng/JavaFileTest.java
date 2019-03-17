@@ -3,11 +3,13 @@ package com.github.zhengzhanpeng;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JavaFileTest {
 
@@ -21,6 +23,11 @@ public class JavaFileTest {
         assertEquals("package com.github.zhengzhanpeng;", lineList.get(0));
         assertEquals("", lineList.get(1));
         assertEquals("import org.junit.Test;", lineList.get(2));
+    }
+
+    @Test
+    void should_throw_Exception_when_get_line_list_by_file_given_not_found_file() {
+        assertThrows(FileNotFoundException.class, () -> javaFile.getLineListBy(new File("error.java")));
     }
 
     @Test

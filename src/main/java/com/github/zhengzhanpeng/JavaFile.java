@@ -4,8 +4,8 @@ import com.github.zhengzhanpeng.annotation.TestCoverage;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +22,7 @@ public class JavaFile {
 
     List<String> getLineListBy(File file) throws IOException {
         if (!file.exists()) {
-            return Collections.emptyList();
+            throw new FileNotFoundException(String.format("error file is: %s", file.getName()));
         }
         return FileUtils.readLines(file, "UTF-8");
     }
