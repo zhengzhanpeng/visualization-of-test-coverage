@@ -1,5 +1,6 @@
 package com.github.zhengzhanpeng;
 
+import com.github.zhengzhanpeng.annotation.TestCoverage;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -19,19 +20,25 @@ public class JavaFile {
         FileUtils.writeLines(file, finalList);
     }
 
-    public List<String> getLineListBy(File file) throws IOException {
+    List<String> getLineListBy(File file) throws IOException {
         if (!file.exists()) {
             return Collections.emptyList();
         }
         return FileUtils.readLines(file, "UTF-8");
     }
 
-    public List<String> generateLineListWhichContainsTestCoverage(List<String> lineList, int coverageValue) {
+    List<String> generateLineListWhichContainsTestCoverage(List<String> lineList, int coverageValue) {
         List<String> copyTargetList = lineList.stream()
                                               .collect(Collectors.toList());
+        final boolean isImportPackage = copyTargetList.stream()
+                                                      .anyMatch(line -> line.equals(TestCoverage.class.getName()));
+        if (!isImportPackage) {
+            copyTargetList.add(2, String.format("import %s;", TestCoverage.class.getName()));
+        }
+
         final int publicClassLineIndex = copyTargetList.stream()
                                                        .filter(line -> line.contains("class"))
-                                                       .mapToInt(line -> lineList.indexOf(line))
+                                                       .mapToInt(line -> copyTargetList.indexOf(line))
                                                        .findFirst()
                                                        .orElseThrow();
         copyTargetList.add(publicClassLineIndex, String.format("@TestCoverage(%s)", coverageValue));
